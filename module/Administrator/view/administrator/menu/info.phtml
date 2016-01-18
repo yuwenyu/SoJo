@@ -1,0 +1,58 @@
+<style type="text/css">
+.dv-table td{border:0;}
+.dv-label{font-weight:bold;color:#15428B;}
+</style>
+
+<?php if ($this->status) { ?>
+<table id="info_tt" class="dv-table" border="0" style="width:100%;">
+	<tr>
+	<?php 
+		$submitInfo = $this->CoreHelper()->srcStaticParameters('MENU','INFO_BUTTON_I');
+		$mHref = 0;
+		$mAction = '';
+		$mController = '';
+		
+		if (!empty($this->data[0]['menu_options']) && is_array($this->data[0]['menu_options'])) 
+		{
+			foreach ($this->data[0]['menu_options'] as $vMenuOptions)
+			{
+				switch ($vMenuOptions['k'])
+				{
+					case 'href':
+						$mHref = $vMenuOptions['v'];
+						break;
+						
+					case 'action':
+						$mAction = $vMenuOptions['v'];
+						break;
+						
+					case 'controller';
+						$mController = $vMenuOptions['v'];
+						break;
+						
+					default: break;
+				}
+			}
+
+			if ($mHref) {
+				echo "<td width=\"75%\">";
+				echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>$mController,'action'=>$mAction)));
+				echo "</td>";
+			}
+			
+			$submitInfo = $this->CoreHelper()->srcStaticParameters('MENU','INFO_BUTTON_II');
+		}
+	?>
+		<td width="25%" align="left">
+			<a href="javascript:void(0);" class="easyui-linkbutton c8" style="width:100px" 
+				onclick="javascript:getMenuInfoWindow(
+					'<?php echo $this->data[0]['id']; ?>',
+					'<?php echo $mAction; ?>',
+					'<?php echo $mController; ?>'
+				);">
+				<?php echo $submitInfo; ?>
+			</a>
+		</td>
+	</tr>
+</table>
+<?php } ?>

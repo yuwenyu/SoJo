@@ -1,0 +1,299 @@
+<div class="row">
+	<div class="box col-md-12" style="margin-top:0px;">
+    	<div class="box-inner">
+    		<div class="box-header well" data-original-title="">
+    			 <h2>
+    			 <button style="margin-top:-5px;margin-right:1px;" class="btn btn-primary btn-xs glyphicon glyphicon-th-list" data-toggle="collapse" 
+    			 	data-target="#AclNavigation" aria-expanded="true" aria-controls="AclNavigation"></button>
+    			 <?php echo $this->CoreHelper()->srcStaticParameters(
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['p'],
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['c']);
+    			 ?></h2>
+    		</div>
+    		<div class="box-content">
+				<div class="collapse" id="AclNavigation">
+					<div class="well">
+				   		<button type="button" class="btn btn-success btn-primary btn-sm" 
+				   				data-toggle="modal" data-target="#AclSearch">
+				   			<span class="glyphicon glyphicon-zoom-in icon-white" aria-hidden="true"></span>
+				   			<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_005'); ?>
+				   		</button>
+				   		<button type="button" class="btn btn-primary btn-sm" autocomplete="off" id="AclSearchOut"
+				   				data-loading-text="<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_006'); ?>">
+				   			<span class="glyphicon glyphicon-zoom-out icon-white" aria-hidden="true"></span>
+				   			<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_004'); ?>
+				   		</button>
+				   		<button type="button" class="btn btn-info btn-primary btn-sm" data-row=""
+				   				data-toggle="modal" data-target="#AclSubmit">
+				   			<span class="glyphicon glyphicon-pencil icon-white" aria-hidden="true"></span>
+				   			<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_002'); ?>
+				   		</button>
+					</div>
+				</div>
+				<div id="AclList"></div>
+    			<div style="text-align:center;"><ul class="pagination" id="paginationUI"></ul></div>
+    		</div>
+   		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="AclSearch" tabindex="-1" role="dialog" aria-labelledby="AclSearchLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="AclSearchLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_SEARCH_TITLE');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<form id="administratorAclForm" method="post">
+         			<div class="form-group">
+						<select class="form-control" id="search_type" name="search_type">
+							<option value="module">Module</option>
+                			<option value="controller">Controller</option>
+                			<option value="action">Action</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="search_value" name="search_value" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_SEARCH_FIELDS_V');?>" />
+					</div>
+         		</form>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:oAcl.Search();">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_005');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="AclSubmit" tabindex="-1" role="dialog" aria-labelledby="AclSubmitLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="AclSubmitLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_W_EDIT_TITIL');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<form id="administratorAclForm" method="post">
+         			<input type="hidden" id="id" name="id" value="" />
+					<div class="form-group">
+						<input type="text" class="form-control" id="module" name="module" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_MODULE');?>" />
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="controller" name="controller" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_CONTROLLER');?>" />
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="action" name="action" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_ACTION');?>" />
+					</div>
+         		</form>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:oAcl.Submit();">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_001');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="AclMsg" tabindex="-1" role="dialog" aria-labelledby="AclMsgLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body"></div>
+      	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var oAcl = {
+'CurrentPage':1,
+'AjaxPostParams':{'page':this.CurrentPage,'rows':o.NumberOfPage},
+'SubmitCondition':
+	function ()
+	{
+		var oFields = {0:'module',1:'controller',2:'action'};
+		for (field in oFields) {
+			if (!c.TogglePopover(oFields[field], function (oEvent, oResultCallback) {
+				if ($.trim(oEvent.val()) == '') {
+					oResultCallback.sMsg = '<?php 
+						echo $this->CoreHelper()
+								  ->srcStaticParameters('WARNING','MSG_001');
+					?>';
+				} else { oResultCallback.bToggleFieldPopover = false; }
+				  return oResultCallback;
+			})) { return false; }
+		}
+		return true;
+	},
+'Submit':
+	function ()
+	{
+		if (this.SubmitCondition()) {
+			var oData = {};
+			var iId = $('#id').val();
+			if ($.trim(iId) != '' && iId > 0) {
+				oData.id = iId;
+			}
+				oData.module = $('#module').val();
+				oData.controller = $('#controller').val();
+				oData.action = $('#action').val();
+			
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Acl','action'=>'ajaxAclSubmit'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: oData,
+				success: function (e) {
+					if (e.code == 200) {
+						oAcl.AjaxPostParams.page=oAcl.CurrentPage;
+						o.init(oAcl.AjaxPostParams);
+						$('#AclSubmit').modal('hide');
+					} else {
+						c.OpenMsg('AclSubmit','AclMsg','Error Code:'+e.code);
+					}
+					
+				},
+				error: function () {$('#AclSubmit').modal('hide');}
+			});
+		}
+	},
+'SearchCondition':
+	function ()
+	{
+		if ($.trim($('#search_type').val()) == '') {
+			c.OpenMsg('AclSearch','AclMsg',
+			'<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_W_MESSAGE_IV');?>');
+			return false;
+		}
+		
+		if (!c.TogglePopover('search_value', function (oEvent, oResultCallback) {
+			if ($.trim(oEvent.val()) == '') {
+				oResultCallback.sMsg = '<?php 
+					echo $this->CoreHelper()
+							  ->srcStaticParameters('TITLE_DEFAULT','MSG_002');
+				?>';
+			} else { oResultCallback.bToggleFieldPopover = false; }
+			  return oResultCallback;
+		})) { return false; }
+
+		return true;
+	},
+'Search':
+	function () 
+	{
+		if (this.SearchCondition()) {
+			oAcl.AjaxPostParams.page = oAcl.CurrentPage;
+			oAcl.AjaxPostParams.search_type = $('#search_type').val();
+			oAcl.AjaxPostParams.search_value = $('#search_value').val();
+			o.init(oAcl.AjaxPostParams);
+			$('#AclSearch').modal('hide');
+		}
+	}
+};
+
+$(function () {
+	o.AjaxUrl = '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Acl','action'=>'data'))); ?>';
+	o.ElementPage = $('#paginationUI');
+	o.ElementList = $('#AclList');
+	o.PaginationOptions.onPageClicked = function (event,originalEvent,type,page){
+		oAcl.AjaxPostParams.page=page;o.init(oAcl.AjaxPostParams);oAcl.CurrentPage=page};
+	o.init(oAcl.AjaxPostParams);
+	
+	c.TogglePopoverbsCheck({
+		'AclSearch':{'fields':{0:'search_value'}},
+		'AclSubmit':{
+			'show':function (e) {
+				var row = $(e.relatedTarget).data('row');
+
+				if ($.trim(row) != '') {
+					$('#id').val($('#rowId_'+row).text());
+					$('#module').val($('#rowModule_'+row).text());
+					$('#controller').val($('#rowController_'+row).text());
+					$('#action').val($('#rowAction_'+row).text());
+				} else {
+					$('#id').val($('#rowId_'+row).text());
+					$('#module').val($('#rowModule_'+row).text());
+					$('#controller').val($('#rowController_'+row).text());
+					$('#action').val($('#rowAction_'+row).text());
+				}
+			},'fields':{0:'module',1:'controller',2:'action'}
+		}
+	});
+
+	$('#AclSearchOut').on('click', function () {
+	 	var btn = $(this).button('loading');
+	    oAcl.AjaxPostParams = {'page':oAcl.CurrentPage,'rows':o.NumberOfPage};
+	    o.init(oAcl.AjaxPostParams);
+	 	btn.button('reset');
+	});
+});
+
+o.ContentHtml = 
+	function (data) {
+		var html = '<table class="table table-striped responsive">';
+		if (typeof(data.rows) != 'undefined')
+		{
+			html += '<thead><tr>';
+				html += '<th width="5%">ID</th>';
+				html += '<th width="15%"><?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_MODULE');?></th>';
+				html += '<th width="15%"><?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_CONTROLLER');?></th>';
+				html += '<th width="25%"><?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_ACTION');?></th>';
+				html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_JT');?></th>';
+				html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('GENERAL','OPERATION_ACTION');?></th>';
+			html += '</tr></thead>';
+			html += '<tbody>';
+			for (var row in data.rows)
+			{
+				html+= '<tr>';
+				html+= '<td id="rowId_'+row+'">' + data.rows[row].id + '</td>';
+				html+= '<td class="center" id="rowModule_'+row+'">' + data.rows[row].module + '</td>';
+				html+= '<td class="center" id="rowController_'+row+'">' + data.rows[row].controller + '</td>';
+				html+= '<td class="center" id="rowAction_'+row+'">' + data.rows[row].action + '</td>';
+				html+= '<td class="center" id="rowJoinTime_'+row+'">' + data.rows[row].raw_add_time + '</td>';
+				html+= '<td class="center">';
+					html+= '<button type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#AclSubmit" data-row="'
+						+row+'"><span class="glyphicon glyphicon-edit icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003'); ?>'+'</button>&nbsp;';
+				html+= '</td>';
+				html+= '</tr>';
+			}
+			html+= '</tbody>';
+		}
+		html += '</table>';
+		return html;
+	};
+</script>

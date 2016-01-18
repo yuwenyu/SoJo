@@ -1,0 +1,71 @@
+<div class="row">
+	<div class="box col-md-12" style="margin-top:0px;">
+    	<div class="box-inner">
+    		<div class="box-header well" data-original-title="">
+    			 <h2><i class="glyphicon glyphicon-th-list"></i>
+    			 &nbsp;
+    			 <?php echo $this->CoreHelper()->srcStaticParameters(
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['p'],
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['c']);
+    			 ?></h2>
+    		</div>
+    		<div class="box-content">
+    			<div id="UserList"></div>
+    			<div style="text-align:center;"><ul class="pagination" id="paginationUI"></ul></div>
+    		</div>
+   		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var oUser =
+{
+'CurrentPage':1,
+'AjaxPostParams':{'page':this.CurrentPage,'rows':o.NumberOfPage},
+};
+
+$(function () {
+	o.AjaxUrl = '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'User','action'=>'data'))); ?>';
+	o.ElementPage = $('#paginationUI');
+	o.ElementList = $('#UserList');
+	o.PaginationOptions.onPageClicked = function (event, originalEvent, type, page){
+		oUser.AjaxPostParams.page=page;o.init(oUser.AjaxPostParams);oUser.CurrentPage=page};
+	o.init(oUser.AjaxPostParams);
+});
+
+o.ContentHtml = 
+	function (data) {
+		var html = '<table class="table table-striped responsive">';
+		if (typeof(data.rows) != 'undefined')
+		{
+			html += '<thead><tr>';
+			html += '<th width="5%">ID</th>';
+			html += '<th width="25%"><?php echo $this->CoreHelper()->srcStaticParameters('USER','LIST_FIELDS_TITLE');?></th>';
+			html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('USER','LIST_FIELDS_USERNAME');?></th>';
+			html += '<th width="25%"><?php echo $this->CoreHelper()->srcStaticParameters('USER','LIST_FIELDS_REALNAME');?></th>';
+			html += '<th width="25%"><?php echo $this->CoreHelper()->srcStaticParameters('GENERAL','OPERATION_ACTION');?></th>';
+			html += '</tr></thead>';
+			html += '<tbody>';
+			for (var row in data.rows)
+			{
+				html+= '<tr>';
+				html+= '<td>' + data.rows[row].id + '</td>';
+				html+= '<td class="center">' + data.rows[row].username + '</td>';
+				html+= '<td class="center">' + data.rows[row].realname + '</td>';
+				html+= '<td class="center">' + data.rows[row].raw_add_time + '</td>';
+				html+= '<td class="center">';
+					html+= '<button type="button" class="btn btn-success btn-primary btn-sm" data-toggle="modal" data-target="#MenuListView" data-row="'
+						+row+'"><span class="glyphicon glyphicon-zoom-in icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_009'); ?>'+'</button>&nbsp;';
+					html+= '<button type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#MenuListEdit" data-row="'
+						+row+'"><span class="glyphicon glyphicon-edit icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003'); ?>'+'</button>';
+				html+= '</td>';
+				html+= '</tr>';
+			}
+			html+= '</tbody>';
+		}
+		html += '</table>';
+		return html;
+	};
+</script>

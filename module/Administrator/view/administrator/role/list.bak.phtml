@@ -1,0 +1,234 @@
+<table id="tt" style="width:100%"
+	   data-options="
+	   		fitColumns:true,pagePosition:'bottom',sortName:'id',sortOrder:'desc',
+			striped:true,border:false,fit:true,rownumbers:true,singleSelect:true,pagination:true,pageSize:20,
+			url:'<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Role','action'=>'data'))); ?>'
+"></table>
+
+<div id="ww" class="easyui-window" 
+	 data-options="
+	 	inline:true,modal:true,closed:true,iconCls:'icon-add',
+	 	collapsible:false,minimizable:false,maximizable:false,resizable:false" 
+	 style="width:260px;height:187px;padding:10px;">
+	<div class="easyui-panel" data-options="border:false" style="width:230px">
+		<form id="administratorRoleForm" method="post">
+			<input type="hidden" id="id" name="id" value="" />
+			<table cellpadding="5">
+				<tr><td width="20%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');?></td>
+                    <td width="80%"><input class="easyui-textbox" type="text" id="name" name="name"
+                    		   	style="width:100%;height:30px;padding:12px"  
+                    		   	data-options="
+                    		   		prompt:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');?>',
+                    		   		required:true,
+                    		   		missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_W_MESSAGE_I');?>'
+                   		" /></td></tr><tr><td width="20%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_REMARK');?></td>
+                    <td width="80%"><input class="easyui-textbox" type="text" id="remark" name="remark"
+                    		   	style="width:100%;height:30px;padding:12px"  
+                    		   	data-options="
+                    		   		prompt:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_REMARK');?>',
+                    		   		required:true,
+                    		   		missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_W_MESSAGE_II');?>'
+                   		" /></td></tr>
+            	<tr><td colspan="2">
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;" 
+					   onclick="javascript:role.sRole();">
+                		<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_001');?>
+                	</a>
+				</td></tr>
+        	</table>
+		</form>
+	</div>
+</div>
+
+<div id="ww_authorities" class="easyui-window" 
+	 data-options="
+	 	inline:true,modal:true,closed:true,iconCls:'icon-add',
+	 	collapsible:false,minimizable:false,maximizable:false,resizable:false" 
+	 style="width:260px;height:150px;padding:10px;">
+	<div class="easyui-panel" data-options="border:false" style="width:230px">
+		<form id="administratorRoleAuthoritiesForm" method="post">
+			<input type="hidden" id="role_id" name="role_id" value="" />
+			<input type="hidden" id="role_authorities_id" name="role_authorities_id" value="" />
+			<table cellpadding="5">
+				<tr><td width="25%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_FIELDS_MODULE');?></td>
+                    <td width="75%"><select id="role_authorities" name="role_authorities" class="easyui-combotree" 
+                    						style="width:100%;height:30px;padding:12px">
+					</select></td></tr>
+				<tr><td colspan="2">
+					<a id="administratorRoleAuthoritiesSubmit" href="javascript:void(0);" class="easyui-linkbutton" 
+					   data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;" 
+					   onclick="javascript:role.sRoleAuthorities();">
+							<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_001');?>
+					</a>
+				</td></tr>
+        	</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+var role = 
+{
+'sRole':
+	function () 
+	{
+		$('#administratorRoleForm').form('submit', {
+			url: "<?php 
+				echo $this->CoreHelper()->rUrl(array(
+					'router'=>array('controller'=>'Role','action'=>'ajaxRoleSubmit'))); ?>",
+			onSubmit: function ()
+			{
+				var bIsValidate = $(this).form('enableValidation').form('validate');
+				if (bIsValidate)
+				{
+					$('#ww').window('close');
+					$('#tt').datagrid('loading');
+				}
+				return bIsValidate;
+			},
+			success: function (data)
+			{
+				var data = eval('(' + data + ')');
+				if (data.code != '200' || !data.status)
+				{
+					$.messager.alert(
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+						'Error:' + data.code,
+					'error');
+				}
+				$('#tt').datagrid('reload');
+			}
+		});
+	},
+	
+'sRoleAuthorities': 
+	function ()
+	{
+		$('#administratorRoleAuthoritiesForm').form('submit', {
+			url: "<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Role','action'=>'ajaxRoleAuthoritiesSubmit'))); ?>",
+			onSubmit: function ()
+			{
+				var bIsValidate = $(this).form('enableValidation').form('validate');
+				if (bIsValidate)
+				{
+					$('#role_authorities_id').val($('#role_authorities').combotree('getValues'));
+					$('#ww_authorities').window('close');
+					$('#tt').datagrid('loading');
+				}
+				return bIsValidate;
+			},
+			success: function (data)
+			{
+				var data = eval('(' + data + ')');
+				if (data.code != '200' || !data.status)
+				{
+					$.messager.alert(
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+						'Error:' + data.code,
+					'error');
+				}
+				$('#tt').datagrid('reload');
+			}
+		});
+	}
+};
+
+$(function(){
+	$('#tt').datagrid({
+		columns:[[{
+			    field:'id',
+				width:'5%',
+				title:'ID',
+			},{
+			    field:'name',
+				width:'30%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');?>',
+			},{
+			    field:'remark',
+				width:'35%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_REMARK');?>',
+			},{
+			    field:'raw_add_time',
+				width:'30%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_JT');?>',
+		}]],
+		toolbar:[{
+			iconCls: 'icon-add',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_002');?>',
+			handler: function () {
+				$('#administratorRoleForm').form('clear');
+				$('#ww').window('open').dialog('center').dialog('setTitle',
+				  '<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('ROLE','LIST_W_ADD_TITIL');?>');
+			}
+		},{
+			iconCls: 'icon-edit',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003');?>',
+			handler: function () {
+				var row = $('#tt').datagrid('getSelected');
+
+				if (row)
+				{
+					$('#administratorRoleForm').form('load', row);
+					$('#ww').window('open').dialog('center').dialog('setTitle',
+					  '<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('ROLE','LIST_W_EDIT_TITIL');?>');
+				}
+				else
+				{	
+					$.messager.alert(
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','MSG_002');?>',
+					'warning');
+					return false;
+				}
+			}
+		},{
+			iconCls: 'icon-remove',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_004');?>',
+			handler: function () {$('#tt').datagrid('load',{});}
+		},'-',{
+			iconCls: 'icon-edit',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('ACL','LIST_W_EDIT_TITIL');?>',
+			handler: function () {
+				var row = $('#tt').datagrid('getSelected');
+
+				if (row)
+				{
+					var o = {}; o.role_id = row.id;
+					$('#administratorRoleAuthoritiesForm').form('load', o);
+					$('#role_authorities').combotree({
+						required:true,multiple:true,
+						data:<?php echo $this->CoreHelper()->vAuthorityData(); ?>
+					});
+
+					$.ajax({
+						url:'<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Role','action'=>'ajaxRoleAuthorities'))); ?>',
+						data:{role_id:row.id},dataType:'json',type:'POST',
+						success:function (data) 
+						{
+							if ($.trim(data.sRoleAuthorities) != '')
+							{
+								$('#role_authorities').combotree('setValues',data.sRoleAuthorities.split(','));
+							}
+						}
+					});
+					var sWwAuthoritiesTitle = '<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('ROLE','LIST_W_ADD_TITIL');?>';
+					$('#ww_authorities').window('open').dialog('center').dialog('setTitle', sWwAuthoritiesTitle);
+				}
+				else
+				{	
+					$.messager.alert(
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+						'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','MSG_002');?>',
+					'warning');
+					return false;
+				}
+			}
+		},'-']
+	});
+	$('#tt').datagrid('getPager').pagination({
+		pageList: [20,35,50],
+		beforePageText: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_BEFOREPAGETEXT');?>',
+		afterPageText: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_AFTERPAGETEXT');?>',
+		displayMsg: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_DISPLAYMSG');?>'
+	});
+});
+</script>

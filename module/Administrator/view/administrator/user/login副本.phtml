@@ -1,0 +1,159 @@
+<div class="ch-container">
+	<div class="row">
+	
+		<div class="row">
+	        <div class="col-md-12 center login-header">
+	            <h2><?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_HEAD_TITLE');?></h2>
+	        </div>
+	        <!--/span-->
+	    </div>
+	    
+	    <div class="row">
+	    	<div class="well col-md-4 center login-box">
+	    		<div id="UserLoginError" class="" role="alert"></div>
+	            <form class="UserLoginForm" method="POST">
+	                <fieldset>
+	                    <div class="input-group input-group-lg">
+	                        <span class="input-group-addon"><i class="glyphicon glyphicon-user blue"></i></span>
+	                        <input type="text" id="username" name="username" class="form-control" data-trigger="manual"
+	                        	   data-toggle="popover" data-placement="bottom" data-content="" data-container="body" 
+	                        	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_FROM_USERNAME')?>"
+	                       	/>
+	                    </div>
+	                    <div class="clearfix"></div><br>
+	
+	                    <div class="input-group input-group-lg">
+	                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock blue"></i></span>
+	                        <input type="password" id="password" name="password" class="form-control" placeholder="******" 
+	                        	   data-trigger="manual" data-toggle="popover" data-placement="top" data-content=""  data-container="body" 
+	                        />
+	                    </div>
+	                    <div class="clearfix"></div>
+	                    
+	                    <p class="center col-md-4">
+	                        <button id="UserLoginSubmit" type="button" class="btn btn-primary" 
+	                        		data-loading-text="<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_006')?>">
+	                        	<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_FROM_SUBMIT');?>
+	                        </button>
+	                    </p>
+	                </fieldset>
+	            </form>
+	    	</div>
+	    </div>
+	    
+	</div>
+</div>
+
+<div class="modal fade" id="UserLoginMsg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="myModalLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body"></div>
+      	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var o = 
+{
+'sUserLogin':
+	function (e)
+	{
+		var btn = $(e).button('loading');
+		
+		var bToggleUsrPopover = true;
+		var sUsrContent = '';
+		var bTogglePwdPopover = true;
+		var sPwdContent = '';
+		
+		var username = $('#username').val();
+		var password = $('#password').val();
+
+		if ($.trim(username) == '')
+		{
+			sUsrContent = '<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_MESSAGE_I');?>';
+		}
+		else if (username.length < 5 || username.length > 15)
+		{
+			sUsrContent = '<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_MESSAGE_II').'(5~15)';?>';
+		}
+		else if (!/^[\w]+$/.test(username))
+		{
+			sUsrContent = '<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_MESSAGE_III');?>';
+		}
+		else
+		{
+			bToggleUsrPopover = false;
+		}
+
+		if (bToggleUsrPopover)
+		{
+			$('#username').attr('data-content',sUsrContent);
+			$('#username').popover('show');	
+			btn.button('reset');
+			return false;
+		}
+
+		if ($.trim(password) == '')
+		{
+			sPwdContent = '<?php echo $this->CoreHelper()->srcStaticParameters('USER','LOGIN_MESSAGE_IV');?>';
+		}
+		else
+		{
+			bTogglePwdPopover = false;
+		}
+
+		if (bTogglePwdPopover)
+		{
+			$('#password').attr('data-content',sPwdContent);
+			$('#password').popover('show');	
+			btn.button('reset');
+			return false;
+		}
+
+		return true;
+	}
+};
+
+$(function(){
+	$('#username').val('');$('#password').val('');
+	$('#username').focus(function () {$(this).popover('hide');$(this).attr('data-content','');});
+	$('#password').focus(function () {$(this).popover('hide');$(this).attr('data-content','');});
+	$('#UserLoginSubmit').click(
+	function () 
+	{
+		if (o.sUserLogin(this))
+		{
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Api','action'=>'ajaxUserLogin'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: {'username':$('#username').val(),'password':$('#password').val()},
+				success: function (data) {
+					if (data.code == '200')
+					{
+						location.href = "<?php echo $this->CoreHelper()->rUrl(array('name'=>'panel')); ?>";
+					}
+					else
+					{
+						$('#UserLoginMsg').find('.modal-body').text('Error:'+data.code);
+						$('#UserLoginMsg').modal('show');
+						$('#UserLoginSubmit').button('reset');
+					}
+				},
+				error: function () {
+					$('#UserLoginSubmit').button('reset');
+				}
+			});
+		}
+	});
+});
+</script>

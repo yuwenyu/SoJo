@@ -1,0 +1,206 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+	<meta charset="UTF-8" />
+<?php 
+	echo $this->headTitle($this->CoreHelper()->srcStaticParameters('LAYOUT','HEAD_TITLE'))
+			->setSeparator(' - ')->setAutoEscape(false);
+	
+	echo $this->headLink(array('rel'=>'shortcut icon','type'=>'image/vnd.microsoft.icon',
+							   'href'=>$this->serverUrl() . $this->basePath() . '/img/favicon.ico'))
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/bootstrap-cerulean.min.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/charisma-app.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.print.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/chosen/chosen.min.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/colorbox/example3/colorbox.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/responsive-tables/responsive-tables.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/jquery.noty.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/noty_theme_default.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/elfinder.min.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/elfinder.theme.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/jquery.iphone.toggle.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/uploadify.css'),false,false)
+			->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/animate.min.css'),false,false);
+	
+	echo $this->headScript()
+			->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/jquery/jquery.min.js'));
+?>
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="<?php echo $this->serverUrl().$this->basePath('charisma/html5.js');?>"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.table>tbody>tr>td, .table>tfoot>tr>td { vertical-align: middle; }
+    </style>
+</head><body>
+<!-- topbar starts -->
+<div class="navbar navbar-default" role="navigation">
+	<div class="navbar-inner">
+		<button type="button" class="navbar-toggle pull-left animated flip">
+        	<span class="sr-only">Toggle navigation</span>
+           	<span class="icon-bar"></span>
+           	<span class="icon-bar"></span>
+           	<span class="icon-bar"></span>
+    	</button>
+    	<a class="navbar-brand" href="index.html">
+    		<!-- <img alt="Logo" src="img/logo20.png" class="hidden-xs"/> -->
+        	<span>Pa-CMS</span></a>
+        	
+        <!-- user dropdown starts -->
+        <div class="btn-group pull-right">
+        	<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            	<i class="glyphicon glyphicon-user"></i><span class="hidden-sm hidden-xs">
+            		&nbsp;<?php echo $this->CoreHelper()->vAuthStorage()->realname;?>&nbsp;</span>
+            	<span class="caret"></span>
+         	</button>
+           	<ul class="dropdown-menu">
+           		<!-- <li><a href="#">Profile</a></li> 
+               	<li class="divider"></li> -->
+              	<li><a href="<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'User','action'=>'quit'))); ?>">
+              		<?php echo $this->CoreHelper()->srcStaticParameters('LAYOUT','EXIT_TITLE'); ?></a></li>
+          	</ul>
+       	</div>
+       	<!-- user dropdown ends -->
+	</div>	
+</div>
+<!-- topbar ends -->
+
+<div class="ch-container">
+	<div class="row">
+		<!-- left menu starts -->
+		<div class="col-sm-2 col-lg-2">
+			<div class="sidebar-nav">
+                <div class="nav-canvas">
+                	<div class="nav-sm nav nav-stacked"></div>
+                	<ul class="nav nav-pills nav-stacked main-menu">
+                <?php 
+                	$aTree = $this->CoreHelper()->srcTree();
+					if (!empty($aTree) && is_array($aTree))
+					{
+						foreach ($aTree as $vTree)
+						{
+							if (isset($vTree['children']) && !empty($vTree['children']) && is_array($vTree['children']))
+							{
+				?>
+					<li class="accordion">
+						<a href="javascript:void(0);"><i class="glyphicon glyphicon-plus"></i>
+							<span><?php echo $vTree['text'];?></span></a>
+						<ul class="nav nav-pills nav-stacked">
+				<?php 
+								foreach ($vTree['children'] as $vTreeChild)
+								{
+									echo '<li><a class="nav-ajax" data-url="'.$vTreeChild['href_text'].'" href="javascript:void(0);">'.$vTreeChild['text'].'</a></li>';
+								}
+				?>
+						</ul>
+					</li>			
+				<?php 
+							}
+							else
+							{
+				?>
+					<li><a class="nav-ajax" data-url="<?php echo $vTree['href_text'];?>" href="javascript:void(0);"><i class="glyphicon glyphicon-file"></i>
+						<span><?php echo $vTree['text']; ?></span></a></li>
+				<?php 
+							}
+						}
+					}
+                ?>
+                	</ul>
+                </div>
+        	</div>
+		</div>
+		<!-- left menu ends -->
+		
+		<noscript>
+            <div class="alert alert-block col-md-12">
+                <h4 class="alert-heading">Warning!</h4>
+                <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a>
+                    enabled to use this site.</p>
+            </div>
+        </noscript>
+        <!-- content starts 
+        <div id="content" class="col-lg-10 col-sm-10">
+        	<div class="row">
+				<div class="box col-md-12">
+		    		<div class="box-inner">
+		    			<div class="box-header well" data-original-title="">
+		    				 <h2><i class="glyphicon glyphicon-user"></i> Datatable + Responsive</h2>
+		    			</div>
+		    		</div>
+		    	</div>
+			</div>
+        </div> -->
+        <!-- content ends -->
+	</div>
+</div>
+
+<?php 
+	echo $this->inlineScript()
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap/dist/js/bootstrap.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bootstrap_paginator.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bootstrap_paginator_plugin.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/c.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.cookie.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/moment/min/moment.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.dataTables.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/chosen/chosen.jquery.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/colorbox/jquery.colorbox-min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.noty.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/responsive-tables/responsive-tables.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.raty.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.iphone.toggle.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.autogrow-textarea.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.uploadify-3.1.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.history.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/charisma.js'));
+?>
+<script type="text/javascript">
+$(function () {
+	$('a.nav-ajax').click(function (e) {
+		$.ajax({
+			url: $(this).attr('data-url'),
+			dataType: 'html',
+			beforeSend: function (xhr) {
+				var bIsUserLogin = true;
+				$.ajax({
+					url:'<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Api','action'=>'ajaxIsUserLogin'))); ?>',
+					dataType: 'json',
+					success:function (e) 
+					{
+						if (e.code != '1')
+						{
+							bIsUserLogin = false;
+						}
+					}
+				});
+				
+				if (bIsUserLogin)
+				{
+					$('.sidebar-nav').removeClass('active');
+			        $('.navbar-toggle').removeClass('active');
+			        $('#loading').remove();
+			        $('#content').fadeIn().html('<div id="loading" class="center"><div class="center"></div></div>');
+				}
+				else
+				{
+					location.href = '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'User','action'=>'quit'))); ?>';
+					return false;
+				}
+			},
+			success: function (data) {
+				$('#content').html(data);
+			},
+			complete: function (xhr,status) {
+				$('ul.main-menu li.active').removeClass('active');
+		        $(this).parent('li').addClass('active');
+			}
+		});
+    });
+});
+</script>
+</body></html>

@@ -1,0 +1,320 @@
+<table id="tt" style="width:100%"
+	   data-options="
+	   		fitColumns:true,pagePosition:'bottom',sortName:'id',sortOrder:'desc',
+			striped:true,border:false,fit:true,rownumbers:true,singleSelect:true,pagination:true,pageSize:20,
+			url:'<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'data'))); ?>'
+"></table>
+
+<div id="ww" class="easyui-window" 
+	 title="<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TITIL');?>" 
+	 data-options="
+	 	inline:true,modal:true,closed:true,iconCls:'icon-add',
+	 	collapsible:false,minimizable:false,maximizable:false,resizable:false" 
+	 style="width:260px;height:190px;padding:10px;">
+	 <div class="easyui-panel" data-options="border:false" style="width:230px">
+	 	<form id="administratorMenuForm" method="post">
+	 		<input type="hidden" id="id" name="id" />
+	 		<input type="hidden" id="status" name="status" value="1" />
+	 		<table cellpadding="5">
+	 			<tr><td><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TN');?></td>
+                    <td><input class="easyui-textbox" type="text" id="name" name="name"
+                    		   	style="width:100%;height:30px;padding:12px"  
+                    		   	data-options="
+                    		   		prompt:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TN');?>',
+                    		   		required:true,validType:'menu_name[2,4]',
+                    		   		missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_I');?>'
+                   		" /></td></tr>
+                <tr><td><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TP');?></td>
+                	<td><select class="easyui-combobox" name="pid" id="pid" 
+                				data-options="
+                					required:true,
+                					missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_III');?>'
+                			  " style="width:100%;height:30px;padding:12px">
+                	<?php 
+                		if (isset($this->administratorMenus) && !empty($this->administratorMenus) && is_array($this->administratorMenus)) 
+                		{
+                			foreach ($this->administratorMenus as $vAdministratorMenu)
+                			{
+                				echo "<option value=\"{$vAdministratorMenu['id']}\">{$vAdministratorMenu['name']}</option>";
+                			}
+                		}
+                	?>
+                		</select></td></tr>
+                <tr><td colspan="2">
+                	<a id="administratorMenuFormSubmit" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;" onclick="javascript:submitMenuForm();">
+                		<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_SUMBIT');?>
+                	</a></td></tr>
+	 		</table>
+	 	</form>
+	 </div>
+</div>
+
+<div id="info_ww" class="easyui-window" 
+	 data-options="
+	 	inline:true,modal:true,closed:true,iconCls:'icon-add',
+	 	collapsible:false,minimizable:false,maximizable:false,resizable:false" 
+	 style="width:280px;height:230px;padding:10px;">
+	 <div class="easyui-panel" data-options="border:false" style="width:250px">
+	 	<form id="administratorMenuInfoForm" method="post">
+	 		<input type="hidden" id="menu_id" name="menu_id" value="" />
+	 		<table cellpadding="5">
+	 			<tr><td width="35%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_HREF');?></td>
+	 				<td><select class="easyui-combobox" name="info_h" id="info_h" 
+                				data-options="required:true,
+                					missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_III');?>'
+                			  " style="width:100%;height:30px;padding:12px">
+                		<option value="1">T</option>
+                		<option value="0">F</option>
+                	</select></td>
+	 			</tr>
+	 			<tr><td width="35%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_CONTROLLER');?></td>
+	 				<td><input class="easyui-textbox" type="text" id="info_c" name="info_c"
+                    		   	style="width:100%;height:30px;padding:12px"  
+                    		   	data-options="
+                    		   		prompt:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_CONTROLLER');?>',
+                    		   		required:true,validType:'info[2,20]',
+                    		   		missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_I');?>'
+                   		" value="" /></td>
+	 			</tr>
+	 			<tr><td width="35%" align="right"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_ACTION');?></td>
+	 				<td><input class="easyui-textbox" type="text" id="info_a" name="info_a"
+                    		   	style="width:100%;height:30px;padding:12px" 
+                    		   	data-options="
+                    		   		prompt:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_ACTION');?>',
+                    		   		required:true,validType:'info[2,20]',
+                    		   		missingMessage:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_I');?>'
+                   		" /></td>
+	 			</tr>
+	 			<tr><td colspan="2">
+					<a id="administratorMenuInfoFormSubmit" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;" onclick="javascript:submitMenuInfoForm();">
+                		<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_SUMBIT');?>
+                	</a>
+				</td></tr>
+	 		</table>
+	 	</form>
+	 </div>
+</div>
+
+<script type="text/javascript">
+function getMenuInfoWindow(id, action, controller)
+{
+	if (typeof(id) == 'undefined')
+	{
+		$.messager.alert(
+			'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+			'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','MSG_001');?>',
+		'warning');
+		
+		return false;
+	}
+
+	var o = {};
+	o.menu_id = id;
+	$('#administratorMenuInfoForm').form('clear');
+
+	if (typeof(action) != 'undefined' && $.trim(action) != '' && typeof(controller) != 'undefined' && $.trim(controller) != '')
+	{
+		o.info_h = '1';
+		o.info_a = action;
+		o.info_c = controller;
+	}
+	
+	$('#administratorMenuInfoForm').form('load',o);
+	$('#info_ww').window('open').dialog('center').dialog('setTitle',
+		'<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TITIL');?>');
+}
+
+function submitMenuForm()
+{
+	$('#administratorMenuForm').form('submit', {
+		url: "<?php 
+			echo $this->CoreHelper()->rUrl(array(
+				'router'=>array('controller'=>'Menu','action'=>'ajaxMenuSubmit'))); ?>",
+		onSubmit: function ()
+		{
+			var bIsValidate = $(this).form('enableValidation').form('validate');
+			if (bIsValidate)
+			{
+				$('#ww').window('close');
+				$('#tt').datagrid('loading');
+			}
+			return bIsValidate;
+		},
+		success: function (data)
+		{
+			var data = eval('(' + data + ')');
+			if (data.code != '200' || !data.status)
+			{
+				$.messager.alert(
+					'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+					'Error:' + data.code,
+				'error');
+			}
+			$('#tt').datagrid('reload');
+		}
+	});
+}
+
+function submitMenuInfoForm()
+{
+	$('#administratorMenuInfoForm').form('submit', {
+		url: "<?php 
+			echo $this->CoreHelper()->rUrl(array(
+				'router'=>array('controller'=>'Menu','action'=>'ajaxMenuInfoSubmit'))); ?>",
+		onSubmit: function ()
+		{
+			var bIsValidate = $(this).form('enableValidation').form('validate');
+			if (bIsValidate)
+			{
+				$('#ww').window('close');
+				$('#tt').datagrid('loading');
+			}
+			return bIsValidate;
+		},
+		success: function (data)
+		{
+			var data = eval('(' + data + ')');
+			if (data.code != '200' || !data.status)
+			{
+				$.messager.alert(
+					'<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>',
+					'Error:' + data.code,
+				'error');
+			}
+			$('#tt').datagrid('reload');
+		}
+	});	
+}
+                	
+$.extend($.fn.validatebox.defaults.rules, 
+{
+	menu_name:
+	{
+		validator: function (v,p)
+		{
+			if (v.length < p[0] || v.length > p[1])
+			{
+				$.fn.validatebox.defaults.rules.menu_name.message = '<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_II');?>('+p[0]+'~'+p[1]+')';
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	},
+	info:
+	{
+		validator: function (v,p)
+		{
+			if (v.length < p[0] || v.length > p[1])
+			{
+				$.fn.validatebox.defaults.rules.menu_name.message = '<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_II');?>('+p[0]+'~'+p[1]+')';
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	},message:'',
+});
+                	
+$(function(){
+	$('#tt').datagrid({
+		columns:[[
+		    {
+			    field:'pid',
+				width:'30%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_PID');?>',
+			},
+			{
+			    field:'name',
+				width:'30%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_NAME');?>',
+			},
+			{
+				field:'status',
+				width:'10%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_STATUS');?>',
+				formatter:function (value,row,index)
+				{
+					if (value == 1) 
+					{
+						return 'Y'
+					}
+					else
+					{
+						return 'N';
+					}
+				}
+			},
+			{
+			    field:'raw_add_time',
+				width:'30%',
+				title:'<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_JT');?>',
+			}
+		]],
+		view: detailview,
+		detailFormatter: function(rowIndex, rowData) 
+		{
+			return '<div class="dd" style="padding:5px 0;"></div>';
+		},
+		onExpandRow: function (rowIndex, rowData)
+		{
+			if (typeof(rowData.id) == 'undefined')
+			{
+				alert('Identity Error');
+				return false;
+			}
+			
+			$(this).datagrid('getRowDetail', rowIndex).find('div.dd').panel({
+				height:40,border:false,cache:false,
+				href:'<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'info'))); ?>?id='+rowData.id,
+				onLoad:function () {
+					$('#tt').datagrid('fixDetailRowHeight',rowIndex);
+				}
+			});		$('#tt').datagrid('fixDetailRowHeight',rowIndex);
+		},
+		toolbar:[{
+			iconCls:'icon-add',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_002');?>',
+			handler:function () {
+				$('#administratorMenuForm').form('clear');
+				$('#ww').window('open').dialog('center').dialog('setTitle',
+				  '<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TITIL');?>');
+					
+			}
+		},{
+			iconCls:'icon-edit',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003');?>',
+			handler:function () {
+				var row = $('#tt').datagrid('getSelected');
+
+				if (row)
+				{
+					$('#administratorMenuForm').form('load',row);
+					$('#ww').window('open').dialog('center').dialog('setTitle',
+					  '<?php echo '&nbsp;'.$this->CoreHelper()->srcStaticParameters('MENU','LIST_W_EDIT_TITIL');?>');
+				}
+				else
+				{
+					alert('<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_MESSAGE_IV');?>');
+					return false;
+				}
+			}
+		},{
+			iconCls: 'icon-remove',
+			text:'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_004');?>',
+			handler: function () {$('#tt').datagrid('load',{});}
+		}]
+	});
+	
+	$('#tt').datagrid().datagrid('getPager').pagination({
+		pageList: [20,35,50],
+		beforePageText: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_BEFOREPAGETEXT');?>',
+		afterPageText: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_AFTERPAGETEXT');?>',
+		displayMsg: '<?php echo $this->CoreHelper()->srcStaticParameters('EASYUI','PAGINATION_DISPLAYMSG');?>'
+	});      
+});
+</script>

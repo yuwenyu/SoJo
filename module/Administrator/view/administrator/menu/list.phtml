@@ -1,0 +1,473 @@
+<div class="row">
+	<div class="box col-md-12" style="margin-top:0px;">
+    	<div class="box-inner">
+    		<div class="box-header well" data-original-title="">
+    			 <h2>
+    			 <button style="margin-top:-5px;margin-right:1px;" class="btn btn-primary btn-xs glyphicon glyphicon-th-list" data-toggle="collapse" 
+    			 	data-target="#MenuNavigation" aria-expanded="false" aria-controls="MenuNavigation"></button>
+    			 <?php echo $this->CoreHelper()->srcStaticParameters(
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['p'],
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['c']);
+    			 ?></h2>
+    		</div>
+    		<div class="box-content">
+				<div class="collapse" id="MenuNavigation">
+					<div class="well">
+				   		<button type="button" class="btn btn-primary btn-sm" 
+				   				data-toggle="modal" data-target="#MenuListView">
+				   			<span class="glyphicon glyphicon-pencil icon-white" aria-hidden="true"></span>
+				   			<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_002'); ?>	
+				   		</button>
+					</div>
+				</div>
+				<div id="MenuList"></div>
+    			<div style="text-align:center;"><ul class="pagination" id="paginationUI"></ul></div>
+    		</div>
+   		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MenuListView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="myModalLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_VIEW_TITIL');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<table class="table table-striped">
+         			<tbody>
+         				<tr>
+         					<td class="center" width="30%">
+         						<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_NAME');?>
+         					</td>
+         					<td class="center" id="td_menu_name"></td>
+         				</tr>
+         				<tr>
+         					<td class="center">
+         						<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_STATUS');?>
+         					</td>
+         					<td class="center" id="td_menu_status"></td>
+         				</tr>
+         				<tr>
+         					<td class="center">
+         						<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_JT');?>
+         					</td>
+         					<td class="center" id="td_menu_jointime"></td>
+         				</tr>
+         			</tbody>
+         		</table>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MenuListEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="myModalLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_EDIT_TITIL');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<form id="administratorMenuInfoForm" method="post">
+         			<input type="hidden" id="id" name="id" value="" />
+					<div class="form-group">
+						<input type="text" class="form-control" id="name" name="name" data-trigger="manual"
+	                           data-toggle="popover" data-placement="top" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_ADD_TN');?>" />
+					</div>
+					<div class="form-group">
+						<select class="form-control" id="pid" name="pid">
+							<option value="0">
+								<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_MENU_ROOT');?>
+							</option>
+					<?php 
+                		if (isset($this->administratorMenus) && !empty($this->administratorMenus) && is_array($this->administratorMenus)) 
+                		{
+                			foreach ($this->administratorMenus as $vAdministratorMenu)
+                			{
+                				echo "<option value=\"{$vAdministratorMenu['id']}\">{$vAdministratorMenu['name']}</option>";
+                			}
+                		}
+                	?>
+						</select>
+					</div>
+         		</form>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:oMenu.s();">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_008');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MenuInfoEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="myModalLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_W_EDIT_TITIL');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<form id="administratorMenuInfoForm" method="post">
+         			<input type="hidden" id="menu_id" name="menu_id" value="" />
+	         		<div class="form-group">
+         				<label class="radio-inline">
+							<input type="radio" name="info_h" id="info_h_1" value="1" />
+							<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_HREF_I');?>
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="info_h" id="info_h_2" value="0" /> 
+							<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_HREF_II');?>
+						</label>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="info_c" name="info_c" data-trigger="manual"
+	                           data-toggle="popover" data-placement="top" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_CONTROLLER');?>" />
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="info_a" name="info_a" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_ACTION');?>" />
+					</div>
+         		</form>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:oMenu.sInfo();;">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_008');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="MenuMsg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body"></div>
+      	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var oMenu = 
+{
+'CurrentPage':1,
+'AjaxPostParams':{'page':this.CurrentPage,'rows':o.NumberOfPage},
+'sInfoCondition':
+	function ()
+	{
+		var iMenuId = $('#menu_id').val();
+		
+		if ($.trim(iMenuId) == '' || iMenuId < 1) {
+			$('#MenuInfoEdit').modal('hide');	
+			$('#MenuMsg').find('.modal-body')
+						 .text('<?php echo $this->CoreHelper()->srcStaticParameters('ERROR','ERR_MSG_400');?>');
+			$('#MenuMsg').modal('show');
+			return false;
+		}
+
+		var iInfoHref = $('input[name="info_h"]:checked').val();
+
+		if (iInfoHref != 0 && iInfoHref != 1) {
+			$('#MenuInfoEdit').modal('hide');	
+			$('#MenuMsg').find('.modal-body')
+						 .text('<?php echo $this->CoreHelper()->srcStaticParameters('MENU','INFO_W_MESSAGE_I');?>');
+			$('#MenuMsg').modal('show');
+			return false;
+		}
+
+		if (!c.TogglePopover('info_c', function (oEvent, oResultCallback) {
+			if ($.trim(oEvent.val()) == '') {
+				oResultCallback.sMsg = '<?php 
+					echo $this->CoreHelper()
+							  ->srcStaticParameters('MENU','INFO_W_MESSAGE_I');
+					?>';
+			} else { oResultCallback.bToggleFieldPopover = false;}
+			  return oResultCallback;
+		})) { return false; }
+
+		if (!c.TogglePopover('info_a', function (oEvent, oResultCallback) {
+			if ($.trim(oEvent.val()) == '') {
+				oResultCallback.sMsg = '<?php 
+					echo $this->CoreHelper()
+							  ->srcStaticParameters('MENU','INFO_W_MESSAGE_I');
+					?>';
+			} else { oResultCallback.bToggleFieldPopover = false; }
+			  return oResultCallback;
+		})) { return false; }
+
+		return true;
+	},
+'sInfo':
+	function ()
+	{
+		if (oMenu.sInfoCondition()) 
+		{
+			var iInfoHref = $('input[name="info_h"]:checked').val();
+			if (iInfoHref != 1) {iInfoHref = 0;}
+
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'ajaxMenuInfoSubmit'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: {
+					'menu_id':$('#menu_id').val(),
+					'info_h':iInfoHref,
+					'info_c':$('#info_c').val(),
+					'info_a':$('#info_a').val()
+				},
+				success: function (data)
+				{
+					if (data.code == 200)
+					{
+						o.init(oMenu.CurrentPage);
+						$('#MenuInfoEdit').modal('hide');
+					}
+					else
+					{
+						$('#MenuInfoEdit').modal('hide');
+						$('#MenuMsg').find('.modal-body').text('Error Code:'+data.code);
+						$('#MenuMsg').modal('show');
+					}
+					
+				},
+				error: function () {$('#MenuInfoEdit').modal('hide');}
+			});
+		}
+	},
+'sCondition':
+	function ()
+	{
+		var iMenuId = $('#id').val();
+		
+		if ($.trim(iMenuId) == '' || iMenuId < 1) {
+			$('#MenuListEdit').modal('hide');	
+			$('#MenuMsg').find('.modal-body')
+						 .text('<?php echo $this->CoreHelper()->srcStaticParameters('ERROR','ERR_MSG_400');?>');
+			$('#MenuMsg').modal('show');
+			return false;
+		}
+
+		if (!c.TogglePopover('name', function (oEvent, oResultCallback) {
+			if (oEvent.val().length > 4 || oEvent.val().length < 2) {
+				oResultCallback.sMsg = '<?php 
+					echo $this->CoreHelper()
+							  ->srcStaticParameters('MENU','LIST_W_MESSAGE_II').'(2~4)';
+					?>';
+			} else { oResultCallback.bToggleFieldPopover = false; }
+			  return oResultCallback;
+		})) { return false; }
+		
+		return true;
+	},
+'s': 
+	function ()
+	{
+		if (oMenu.sCondition())
+		{
+			var iPid = $('#pid').val();
+			
+			if ($.trim(iPid) == '') 
+			{
+				iPid = 0;
+			}
+			
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'ajaxMenuSubmit'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: {'id':$('#id').val(),'name':$('#name').val(),'pid':iPid},
+				success: function (data)
+				{
+					if (data.code == 200)
+					{
+						o.init(oMenu.CurrentPage);
+						$('#MenuListEdit').modal('hide');
+					}
+					else
+					{
+						$('#MenuListEdit').modal('hide');
+						$('#MenuMsg').find('.modal-body').text('Error Code:'+data.code);
+						$('#MenuMsg').modal('show');
+					}
+					
+				},
+				error: function () {$('#MenuListEdit').modal('hide');}
+			});
+		}
+	}
+};
+
+$(function () {  
+	o.AjaxUrl = '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'data'))); ?>';
+	o.ElementPage = $('#paginationUI');
+	o.ElementList = $('#MenuList');
+	o.PaginationOptions.onPageClicked = function (event,originalEvent,type,page){
+		oMenu.AjaxPostParams.page=page;o.init(oMenu.AjaxPostParams);oMenu.CurrentPage=page};
+	o.init(oMenu.AjaxPostParams);
+
+	c.TogglePopoverbsInit('MenuListView', function (oModal){
+		c.TogglePopoverbsShow(oModal, function (e){
+			var row = $(e.relatedTarget).data('row');
+			
+			$('#td_menu_name').text($('#rowName_'+row).text());
+			$('#td_menu_status').html($('#rowStatus_'+row).html());
+			$('#td_menu_jointime').text($('#rowJoinTime_'+row).text());
+		});
+	});
+
+	c.TogglePopoverbsInit('MenuListEdit', function (oModal){
+		c.TogglePopoverbsShow(oModal, function (e){
+			var row = $(e.relatedTarget).data('row');
+			
+			$('#id').val($('#rowId_'+row).text());
+			$('#name').val($('#rowName_'+row).text());
+			$('#pid option[value="'+$('#rowPid_'+row).text()+'"]').prop("selected",true);
+		});
+	},{0:'name'});
+
+	c.TogglePopoverbsInit('MenuInfoEdit', function (oModal){
+		c.TogglePopoverbsShow(oModal, function (e){
+			var row = $(e.relatedTarget).data('row');
+			
+			$('#menu_id').val($('#rowId_'+row).text());
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Menu','action'=>'info'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: {'id':$('#rowId_'+row).text()},
+				success: function (e)
+				{
+					if (typeof(e.data[0].menu_options) != 'undefined')
+					{
+						for (i in e.data[0].menu_options)
+						{
+							switch (e.data[0].menu_options[i].k)
+							{
+								case 'href':
+									if (e.data[0].menu_options[i].v == '1') {
+										$('input[name="info_h"][value="1"]').prop('checked',true);
+										$('input[name="info_h"][value="0"]').prop('checked',false);
+									} else {
+										$('input[name="info_h"][value="0"]').prop('checked',true);
+										$('input[name="info_h"][value="1"]').prop('checked',false);
+									}
+									break;
+
+								case 'action':
+									$('#info_a').val(e.data[0].menu_options[i].v);
+									break;
+
+								case 'controller':
+									$('#info_c').val(e.data[0].menu_options[i].v);
+									break;
+
+								default: break; 
+							}
+						}
+					} else {
+						$('input[name="info_h"][value="0"]').prop('checked',true);
+						$('input[name="info_h"][value="1"]').prop('checked',false);
+						$('#info_a').val('');$('#info_c').val('');
+					}
+				},
+				error: function () {}
+			});
+		});
+	},{0:'info_c',1:'info_a'});
+	
+	//input every keydown 
+	//$('#name').bind('input propertychange', function() {console.log('t');}); 
+});
+
+o.ContentHtml = 
+	function (data) {
+		var html = '<table class="table table-striped responsive">';
+		if (typeof(data.rows) != 'undefined')
+		{
+			html += '<thead><tr>';
+				html += '<th width="5%">ID</th>';
+				html += '<th width="10%"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_PID');?></th>';
+				html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_NAME');?></th>';
+				html += '<th width="15%"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_STATUS');?></th>';
+				html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('MENU','LIST_FIELDS_JT');?></th>';
+				html += '<th width="30%"><?php echo $this->CoreHelper()->srcStaticParameters('GENERAL','OPERATION_ACTION');?></th>';
+			html += '</tr></thead>';
+			html += '<tbody>';
+			for (var row in data.rows)
+			{
+				html+= '<tr>';
+				html+= '<td id="rowId_'+row+'">' + data.rows[row].id + '</td>';
+				html+= '<td class="center" id="rowPid_'+row+'">' + data.rows[row].pid + '</td>';
+				html+= '<td class="center" id="rowName_'+row+'">' + data.rows[row].name + '</td>';
+				html+= '<td class="center" id="rowStatus_'+row+'">';
+				if (data.rows[row].status == '1') {
+					html+= '<span class="label-success label label-default">Active</span>';
+				} else {
+					html+= '<span class="label-default label label-danger">Banned</span>';
+				}
+				html+= '</td>';
+				html+= '<td class="center" id="rowJoinTime_'+row+'">' + data.rows[row].raw_add_time + '</td>';
+				html+= '<td class="center">';
+					html+= '<button type="button" class="btn btn-success btn-primary btn-sm" data-toggle="modal" data-target="#MenuListView" data-row="'
+						+row+'"><span class="glyphicon glyphicon-zoom-in icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_009'); ?>'+'</button>&nbsp;';
+					html+= '<button type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#MenuListEdit" data-row="'
+						+row+'"><span class="glyphicon glyphicon-edit icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003'); ?>'+'</button>&nbsp;|&nbsp;';
+					/*
+					html+= '<button type="button" class="btn btn-danger btn-primary btn-xs glyphicon glyphicon-trash icon-white" data-toggle="modal" data-target="#MenuListView" data-row="'
+						+row+'"></button>&nbsp;|&nbsp;';
+					*/
+					html+= '<button style="padding-top:-10px;" type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#MenuInfoEdit" data-row="'
+						+row+'"><span class="glyphicon glyphicon-folder-open icon-white" aria-hidden="true"></span>&nbsp;'
+						+'</button>';
+				html+= '</td>';
+				html+= '</tr>';
+			}
+			html+= '</tbody>';
+		}
+		html += '</table>';
+		return html;
+	};
+</script>

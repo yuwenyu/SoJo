@@ -1,0 +1,208 @@
+<div class="row">
+	<div class="box col-md-12" style="margin-top:0px;">
+    	<div class="box-inner">
+    		<div class="box-header well" data-original-title="">
+    			 <h2>
+    			 <button style="margin-top:-5px;margin-right:1px;" class="btn btn-primary btn-xs glyphicon glyphicon-th-list" data-toggle="collapse" 
+    			 	data-target="#RoleNavigation" aria-expanded="true" aria-controls="RoleNavigation"></button>
+    			 <?php echo $this->CoreHelper()->srcStaticParameters(
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['p'],
+    			 	$this->vStaticParameters->offsetGet('vStaticTitle')['c']);
+    			 ?></h2>
+    		</div>
+    		<div class="box-content">
+    			<div class="collapse" id="RoleNavigation">
+					<div class="well">
+				   		<button type="button" class="btn btn-info btn-primary btn-sm" data-row=""
+				   				data-toggle="modal" data-target="#RoleSubmit">
+				   			<span class="glyphicon glyphicon-zoom-in icon-white" aria-hidden="true"></span>
+				   			<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_002'); ?>
+				   		</button>
+					</div>
+				</div>
+    			<div id="RoleList"></div>
+    			<div style="text-align:center;"><ul class="pagination" id="paginationUI"></ul></div>
+    		</div>
+   		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="RoleSubmit" tabindex="-1" role="dialog" aria-labelledby="RoleSubmitLabel" aria-hidden="true">
+	<div class="modal-dialog">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title" id="RoleSubmitLabel">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_TITLE');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body">
+         		<form id="administratorAclForm" method="post">
+         			<input type="hidden" id="id" name="id" value="" />
+					<div class="form-group">
+						<input type="text" class="form-control" id="name" name="name" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');?>" />
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="remark" name="remark" data-trigger="manual"
+	                           data-toggle="popover" data-placement="bottom" data-content="" data-container="body"
+					      	   placeholder="<?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_REMARK');?>" />
+					</div>
+         		</form>
+         	</div>
+         	<div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_007');?>
+		        </button>
+		        <button type="button" class="btn btn-primary" onclick="javascript:oRole.Submit();">
+		        	<?php echo $this->CoreHelper()->srcStaticParameters('BUTTON','BTN_001');?>
+		        </button>
+			</div>
+      	</div>
+	</div>
+</div>
+
+<div class="modal fade" id="RoleMsg" tabindex="-1" role="dialog" aria-labelledby="RoleMsgLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+   		<div class="modal-content">
+         	<div class="modal-header">
+            	<button type="button" class="close" 
+               			data-dismiss="modal" aria-hidden="true">
+                	&times;
+            	</button>
+            	<h4 class="modal-title">
+            		<?php echo $this->CoreHelper()->srcStaticParameters('WARNING','TITLE_DEFAULT');?>
+            	</h4>
+         	</div>
+         	<div class="modal-body"></div>
+      	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var oRole =
+{
+'CurrentPage':1,
+'AjaxPostParams':{'page':this.CurrentPage,'rows':o.NumberOfPage},
+'SubmitCondition':
+	function ()
+	{
+		var oFields = {0:'name',1:'remark'};
+		for (field in oFields) {
+			if (!c.TogglePopover(oFields[field], function (oEvent, oResultCallback) {
+				if ($.trim(oEvent.val()) == '') {
+					oResultCallback.sMsg = '<?php 
+						echo $this->CoreHelper()
+								  ->srcStaticParameters('WARNING','MSG_001');
+					?>';
+				} else { oResultCallback.bToggleFieldPopover = false; }
+				  return oResultCallback;
+			})) { return false; }
+		}
+		return true;
+	},
+'Submit':
+	function ()
+	{
+		if (this.SubmitCondition()) {
+			var oData = {};
+			var iId = $('#id').val();
+			if ($.trim(iId) != '' && iId > 0) {
+				oData.id = iId;
+			}
+				oData.name = $('#name').val();
+				oData.remark = $('#remark').val();
+			
+			$.ajax({
+				url: '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Role','action'=>'ajaxRoleSubmit'))); ?>',
+				dataType: 'json',
+				type: 'POST',
+				data: oData,
+				success: function (e) {
+					if (e.code == 200) {
+						oRole.AjaxPostParams.page=oRole.CurrentPage;
+						o.init(oRole.AjaxPostParams);
+						$('#RoleSubmit').modal('hide');
+					} else {
+						c.OpenMsg('RoleSubmit','RoleMsg','Error Code:'+e.code);
+					}
+					
+				},
+				error: function () {$('#RoleSubmit').modal('hide');}
+			});
+		}
+	}
+};
+
+$(function () {
+	o.AjaxUrl = '<?php echo $this->CoreHelper()->rUrl(array('router'=>array('controller'=>'Role','action'=>'data'))); ?>';
+	o.ElementPage = $('#paginationUI');
+	o.ElementList = $('#RoleList');
+	o.PaginationOptions.onPageClicked = function (event, originalEvent, type, page){
+		oRole.AjaxPostParams.page=page;o.init(oRole.AjaxPostParams);oRole.CurrentPage=page};
+	o.init(oRole.AjaxPostParams);
+
+	c.TogglePopoverbsCheck({
+		'RoleSubmit':{
+			'show':function (e) {
+				var row = $(e.relatedTarget).data('row');
+
+				if ($.trim(row) != '') {
+					$('#id').val($('#rowId_'+row).text());
+					$('#name').val($('#rowName_'+row).text());
+					$('#remark').val($('#rowRemark_'+row).text());
+				} else {
+					$('#id').val($('#rowId_'+row).text());
+					$('#name').val($('#rowName_'+row).text());
+					$('#remark').val($('#rowRemark_'+row).text());
+				}
+			},'fields':{0:'name',1:'remark'}
+		}
+	});
+});
+
+o.ContentHtml = 
+	function (data) {
+		var html = '<table class="table table-striped responsive">';
+		if (typeof(data.rows) != 'undefined')
+		{
+			html += '<thead><tr>';
+			html += '<th width="5%">ID</th>';
+			html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');?></th>';
+			html += '<th width="20%"><?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_REMARK');?></th>';
+			html += '<th width="25%"><?php echo $this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_JT');?></th>';
+			html += '<th width="30%"><?php echo $this->CoreHelper()->srcStaticParameters('GENERAL','OPERATION_ACTION');?></th>';
+			html += '</tr></thead>';
+			html += '<tbody>';
+			for (var row in data.rows)
+			{
+				html+= '<tr>';
+				html+= '<td id="rowId_'+row+'">' + data.rows[row].id + '</td>';
+				html+= '<td class="center" id="rowName_'+row+'">' + data.rows[row].name + '</td>';
+				html+= '<td class="center" id="rowRemark_'+row+'">' + data.rows[row].remark + '</td>';
+				html+= '<td class="center" id="rowJoinTime_'+row+'">' + data.rows[row].raw_add_time + '</td>';
+				html+= '<td class="center">';
+					html+= '<button type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#RoleSubmit" data-row="'
+						+row+'"><span class="glyphicon glyphicon-edit icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo 
+							$this->CoreHelper()->srcStaticParameters('BUTTON','BTN_003') .
+							$this->CoreHelper()->srcStaticParameters('ROLE','LIST_FIELDS_NAME');
+						?>'+'</button>&nbsp;';
+					html+= '<button type="button" class="btn btn-info btn-primary btn-sm" data-toggle="modal" data-target="#" data-row="'
+						+row+'"><span class="glyphicon glyphicon-edit icon-white" aria-hidden="true"></span>&nbsp;'
+						+'<?php echo 
+							$this->CoreHelper()->srcStaticParameters('ACL','LIST_W_EDIT_TITIL');
+						?>'+'</button>';
+				html+= '</td>';
+				html+= '</tr>';
+			}
+			html+= '</tbody>';
+		}
+		html += '</table>';
+		return html;
+	};
+</script>

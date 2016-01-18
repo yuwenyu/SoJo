@@ -1,0 +1,78 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+	<meta charset="UTF-8" />
+<?php 
+	echo $this->headTitle($this->CoreHelper()->srcStaticParameters('USER','LOGIN_HEAD_TITLE'))
+			  ->setSeparator(' - ')->setAutoEscape(false);
+	
+	/*
+	echo $this->headLink(array('rel'=>'shortcut icon','type'=>'image/vnd.microsoft.icon',
+							   'href'=>$this->serverUrl() . $this->basePath() . '/img/favicon.ico'))
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/bootstrap-cerulean.min.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/charisma-app.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.print.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/chosen/chosen.min.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/colorbox/example3/colorbox.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/responsive-tables/responsive-tables.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/jquery.noty.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/noty_theme_default.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/elfinder.min.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/elfinder.theme.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/jquery.iphone.toggle.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/uploadify.css'),false,false)
+			  ->appendStylesheet($this->serverUrl().$this->basePath('charisma/css/animate.min.css'),false,false);
+	
+	echo $this->headScript()
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/jquery/jquery.min.js'));
+	*/
+?>
+	<!-- The styles -->
+    <link href="http://172.18.19.92/charisma/css/bootstrap-cerulean.min.css" rel="stylesheet">
+
+    <link href="http://172.18.19.92/charisma/css/charisma-app.css" rel="stylesheet">
+    <link href='http://172.18.19.92/charisma/bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/bower_components/fullcalendar/dist/fullcalendar.print.css' rel='stylesheet' media='print'>
+    <link href='http://172.18.19.92/charisma/bower_components/chosen/chosen.min.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/bower_components/responsive-tables/responsive-tables.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/jquery.noty.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/noty_theme_default.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/elfinder.min.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/elfinder.theme.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/jquery.iphone.toggle.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/uploadify.css' rel='stylesheet'>
+    <link href='http://172.18.19.92/charisma/css/animate.min.css' rel='stylesheet'>
+
+    <!-- jQuery -->
+    <script src="http://172.18.19.92/charisma/bower_components/jquery/jquery.min.js"></script>
+    
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="<?php echo $this->serverUrl().$this->basePath('charisma/html5.js');?>"></script>
+    <![endif]-->
+    
+</head><body><?php echo $this->content; ?>
+<?php 
+	echo $this->inlineScript()
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap/dist/js/bootstrap.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.cookie.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/moment/min/moment.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/fullcalendar/dist/fullcalendar.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.dataTables.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/chosen/chosen.jquery.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/colorbox/jquery.colorbox-min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.noty.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/responsive-tables/responsive-tables.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.raty.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.iphone.toggle.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.autogrow-textarea.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.uploadify-3.1.min.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/jquery.history.js'))
+			  ->appendFile($this->serverUrl().$this->basePath('charisma/js/charisma.js'));
+?>
+</body></html>
